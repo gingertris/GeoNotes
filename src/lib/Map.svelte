@@ -30,4 +30,4 @@
     }
 </script>
 
-<div style="height:700px;width:90%" use:mapAction />
+<div style="height:700px;width:100%" use:mapAction />
