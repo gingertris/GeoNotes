@@ -3,7 +3,7 @@
     import Map from "$lib/Map.svelte";
     import type { Marker } from 'leaflet';
 	import type { ActionData, PageData } from "./$types";
-    import type {Note} from '@prisma/client/edge'
+    import type {Note} from '@prisma/client'
 	import { onMount } from "svelte";
     let selectedMarker:Marker | null, notes:Note[], selectedNote: Note | null= null;
 
