@@ -1,11 +1,16 @@
 
 <script lang="ts">
     import Map from "$lib/Map.svelte";
-    import type {Marker, Map as LMap, latLng} from 'leaflet';
+    import type { Marker } from 'leaflet';
 	import type { PageData } from "./$types";
-    let selectedMarker:Marker | null, existingMarkers:Marker[], map: LMap;
+	import { onMount } from "svelte";
+    let selectedMarker:Marker | null, existingMarkers:any[], markerData: any = null;
 
     export let data: PageData;
+
+    const loadMarkers = (c:any) => {
+        existingMarkers = data.markers ?? []
+    }
 
 </script>
 
@@ -23,12 +28,12 @@
 
 
 <div class="flex flex-row space-x-4 p-4">
-    <div class="{selectedMarker ? "basis-3/4" : "basis-full"}">
-       <Map bind:selectedMarker bind:existingMarkers bind:map /> 
+    <div class="{selectedMarker ? "basis-3/4" : "basis-full"}" use:loadMarkers>
+       <Map bind:selectedMarker bind:existingMarkers bind:markerData/> 
     </div>
     
-    {#if selectedMarker}
-    <div class="basis-1/4">
+    {#if selectedMarker && !markerData}
+    <div class="basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
         <form method="POST">
                 <label class="label">
                     <span>Title</span>
@@ -54,6 +59,12 @@
    
                 <input type="submit" value="Save" class="btn variant-filled"/>
         </form>
+    </div>
+
+    {:else if markerData}
+    <div class="basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
+        <h3>{markerData.title}</h3>
+        <p>{markerData.note}</p>
     </div>
     {/if}
 
