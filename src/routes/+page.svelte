@@ -2,69 +2,87 @@
 <script lang="ts">
     import Map from "$lib/Map.svelte";
     import type { Marker } from 'leaflet';
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
+    import type {Note} from '@prisma/client'
 	import { onMount } from "svelte";
-    let selectedMarker:Marker | null, existingMarkers:any[], markerData: any = null;
+    let selectedMarker:Marker | null, notes:Note[], selectedNote: Note | null= null;
+
+    let isEdit = false;
+    $: if(selectedMarker) {
+        isEdit=true
+    } else{
+        isEdit=false
+    }
 
     export let data: PageData;
+    export let form: ActionData;
 
     const loadMarkers = (c:any) => {
-        existingMarkers = data.markers ?? []
+        notes = data.notes ?? []
     }
 
 </script>
 
-
-
-<h1>GeoNotes</h1>
-
-{#if !data.user}
-    <a href="/auth/login/discord">Log in with Discord</a>
-{:else}
-    <span>Logged in as {data.user.username} </span>
-    <a href="/auth/logout">Log out</a>
-{/if}
-
-
-
 <div class="flex flex-row space-x-4 p-4">
-    <div class="{selectedMarker ? "basis-3/4" : "basis-full"}" use:loadMarkers>
-       <Map bind:selectedMarker bind:existingMarkers bind:markerData/> 
+    <div class="{isEdit || selectedNote ? "basis-3/4" : "basis-full"}" use:loadMarkers>
+       <Map bind:selectedMarker bind:notes={notes} bind:selectedNote/> 
     </div>
     
-    {#if selectedMarker && !markerData}
-    <div class="basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
-        <form method="POST">
+    {#if isEdit}
+    <div class="basis-1/4 rounded-md p-3 bg-slate-200">
+        <form action="?/save"  method="POST">
+            <div class="space-y-2">
                 <label class="label">
                     <span>Title</span>
-                    <input class="input" type="text" name="title"/>
+                    <input class="input" type="text" name="title" value="{selectedNote ? selectedNote.title : ""}"/>
                 </label>
 
                 <label class="label">
-                    <span>Note</span>
-                    <textarea class="textarea resize-none" rows="20" name="note"/>
+                    <span>Body</span>
+                    <textarea class="textarea resize-none" rows="20" name="body" value="{selectedNote ? selectedNote.body : ""}"/>
                 </label>
                 
 
 
                 <label class="label">
-                    <span>Latitude: {selectedMarker?.getLatLng().lat}</span>
-                    <input type="hidden" value={selectedMarker?.getLatLng().lat} name="lat"/>
+                    <span>Latitude: {selectedNote ? selectedNote.lat : selectedMarker?.getLatLng().lat}</span>
+                    <input type="hidden" value={selectedNote ? selectedNote.lat : selectedMarker?.getLatLng().lat} name="lat"/>
                 </label>
                 
                 <label class="label">
-                    <span>Longitude: {selectedMarker?.getLatLng().lng}</span>
-                    <input type="hidden" value={selectedMarker?.getLatLng().lng} name="lng" />
+                    <span>Longitude: {selectedNote ? selectedNote.lng : selectedMarker?.getLatLng().lng}</span>
+                    <input type="hidden" value={selectedNote ? selectedNote.lng : selectedMarker?.getLatLng().lng} name="lng" />
                 </label>
-   
-                <input type="submit" value="Save" class="btn variant-filled"/>
+
+                {#if selectedNote}
+                <input type="hidden" value="{selectedNote.id}" name="id" />
+                {/if}
+
+                <input type="submit" value="Save" class="btn variant-filled-primary"/>
+                <button class="btn variant-filled-surface" on:click={() => {isEdit=false;}}>Cancel</button>
+            </div>
+                
         </form>
     </div>
 
-    {:else if markerData}
-    <div class="basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
-        <h3>{markerData.title}</h3>
-        <p>{markerData.note}</p>
+    {:else if selectedNote}
+    <div class="flex flex-col basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
+        <header class="text-lg"><b>{selectedNote.title}</b></header>
+        <main class="flex-grow">{selectedNote.body}</main>
+        <footer>
+            <div class="flex">
+                <div class="flex-grow">
+                    <p>Latitude: {selectedNote.lat}</p>
+                    <p>Longitude: {selectedNote.lng}</p>
+                </div>
+                <form action="?/delete" method="POST">
+                    <button class="btn variant-filled-primary" on:click={() => {isEdit=true}}>Edit</button>
+                    <input type="hidden" name="id" value="{selectedNote.id}">
+                    <input type="submit" class="btn variant-filled-error" value="Delete" />
+                </form>
+            </div>
+
+        </footer>
     </div>
     {/if}
 

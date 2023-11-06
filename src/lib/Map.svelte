@@ -1,15 +1,16 @@
 <script lang="ts">
     import 'leaflet/dist/leaflet.css';
     import type {Marker} from 'leaflet'
+    import type {Note} from '@prisma/client';
 
     let map;
     export let selectedMarker: Marker | null = null;
-    export let existingMarkers: any[] = [];
-    export let markerData = null;
+    export let notes: Note[] = [];
+    export let selectedNote: Note|null = null;
 
     async function createMap(container:HTMLElement){
         const L = await import("leaflet")
-        let m = L.map(container).setView([51.505, -0.09], 13)
+        let m = L.map(container).setView([51.505, -0.09], 5)
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -19,7 +20,7 @@
             if(selectedMarker) selectedMarker.removeFrom(m)
             console.log(e)
             selectedMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(m)
-            markerData = null;
+            selectedNote = null;
         })
 
         var redIcon = new L.Icon({
@@ -31,13 +32,15 @@
             shadowSize: [41, 41]
         });
 
-        for(let marker of existingMarkers){
-            let newMarker = L.marker([marker.lat, marker.lng], {
-                title: marker.title,
+        for(let note of notes){
+            let marker = L.marker([note.lat, note.lng], {
+                title: note.title,
                 icon:redIcon
-            }).bindPopup(marker.title);
-            newMarker.on('click', ()=>{
-                markerData = {title: marker.title, note:marker.note};
+            }).bindPopup(note.title);
+            marker.on('click', ()=>{
+                selectedNote = note;
+                selectedMarker?.removeFrom(m);
+                selectedMarker = null;
             }).addTo(m);
         }
 
@@ -50,4 +53,4 @@
     }
 </script>
 
-<div style="height:700px;width:100%" use:mapAction />
+<div style="height:800px;width:100%" class="rounded-md" use:mapAction />
