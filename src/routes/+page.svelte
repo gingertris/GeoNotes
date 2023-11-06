@@ -24,9 +24,17 @@
 </script>
 
 <div class="flex flex-row space-x-4 p-4">
+
+    {#if data.user}
     <div class="{isEdit || selectedNote ? "basis-3/4" : "basis-full"}" use:loadMarkers>
-       <Map bind:selectedMarker bind:notes={notes} bind:selectedNote/> 
+        <Map bind:selectedMarker bind:notes={notes} bind:selectedNote/> 
     </div>
+    {:else}
+    <div>
+        Please log in to use GeoNotes.
+    </div>
+    {/if}
+
     
     {#if isEdit}
     <div class="basis-1/4 rounded-md p-3 bg-slate-200">
