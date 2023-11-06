@@ -69,4 +69,4 @@
     }
 </script>
 
-<div style="height:800px;width:100%" class="rounded-md" use:mapAction />
+<div style="width:100%" class="h-full rounded-md" use:mapAction />

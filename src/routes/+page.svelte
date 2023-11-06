@@ -23,7 +23,7 @@
 
 </script>
 
-<div class="flex flex-row space-x-4 p-4">
+<div class="flex flex-row space-x-4 p-4 h-[80vh]">
 
     {#if data.user}
     <div class="{isEdit || selectedNote ? "basis-3/4" : "basis-full"}" use:loadMarkers>
@@ -47,7 +47,7 @@
 
                 <label class="label">
                     <span>Body</span>
-                    <textarea class="textarea resize-none" rows="20" name="body" value="{selectedNote ? selectedNote.body : ""}"/>
+                    <textarea class="textarea resize-none" rows="19" name="body" value="{selectedNote ? selectedNote.body : ""}"/>
                 </label>
                 
 
