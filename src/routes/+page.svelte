@@ -4,8 +4,13 @@
     import type { Marker } from 'leaflet';
 	import type { ActionData, PageData } from "./$types";
     import type {Note} from '@prisma/client'
-	import { onMount } from "svelte";
+    import MarkdownIt from 'markdown-it';
+
     let selectedMarker:Marker | null, notes:Note[], selectedNote: Note | null= null;
+
+
+    const md = new MarkdownIt();
+    $: selectedNoteHTML = md.render(selectedNote?.body ?? "")
 
     let isEdit = false;
     $: if(selectedMarker) {
@@ -76,7 +81,7 @@
     {:else if selectedNote}
     <div class="flex flex-col basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
         <header class="text-lg"><b>{selectedNote.title}</b></header>
-        <main class="flex-grow">{selectedNote.body}</main>
+        <main class="flex-grow">{@html selectedNoteHTML}</main>
         <footer>
             <div class="flex">
                 <div class="flex-grow">
