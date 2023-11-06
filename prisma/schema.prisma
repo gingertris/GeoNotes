@@ -17,6 +17,7 @@ model User {
 
   auth_session Session[]
   key          Key[]
+  Note         Note[]
 }
 
 model Session {
@@ -36,4 +37,14 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model Note {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  title  String
+  body   String
+  lat    Float
+  lng    Float
 }
