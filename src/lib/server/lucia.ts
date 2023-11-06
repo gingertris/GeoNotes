@@ -1,12 +1,10 @@
 import { lucia } from "lucia";
 import { sveltekit } from "lucia/middleware";
 import { prisma } from "@lucia-auth/adapter-prisma";
-import { PrismaClient } from "@prisma/client"
 import { dev } from "$app/environment";
 import {discord} from "@lucia-auth/oauth/providers"
 import { DISCORD_ID, DISCORD_SECRET } from "$env/static/private";
-
-const client = new PrismaClient();
+import { prisma as client } from "$lib/PrismaClient";
 
 export const auth = lucia({
     adapter:prisma(client),
