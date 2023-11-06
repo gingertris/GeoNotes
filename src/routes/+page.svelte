@@ -22,26 +22,42 @@
 
 
 
-<div style="display:flex; gap:10px">
-    <Map bind:selectedMarker bind:existingMarkers bind:map />
-    <div style="width:25%">
+<div class="flex flex-row space-x-4 p-4">
+    <div class="{selectedMarker ? "basis-4/5" : "basis-full"}">
+       <Map bind:selectedMarker bind:existingMarkers bind:map /> 
+    </div>
+    
+    {#if selectedMarker}
+    <div class="basis-1/5">
         <form>
-            <div>
-                <p>Title</p>
-                <input type="text" name="title" />
-            </div>
-            <div>
-                <p>Note</p>
-                <textarea name="note" />
-            </div>
-            <div>
-                <p>Latitude: {selectedMarker?.getLatLng().lat}</p>
-                <p>Longitude: {selectedMarker?.getLatLng().lng}</p>
-                <input type="submit" value="Save"/>
-            </div>
-            <input type="hidden" value={selectedMarker?.getLatLng().lat} />
+                <label class="label">
+                    <span>Title</span>
+                    <input class="input" type="text" name="title"/>
+                </label>
+
+                <label class="label">
+                    <span>Note</span>
+                    <textarea class="textarea resize-none" rows="20" name="note"/>
+                </label>
+                
+
+
+                <label class="label">
+                    <span>Latitude: {selectedMarker?.getLatLng().lat}</span>
+                    <input type="hidden" value={selectedMarker?.getLatLng().lat} name="lat"/>
+                </label>
+                
+                <label class="label">
+                    <span>Longitude: {selectedMarker?.getLatLng().lng}</span>
+                    <input type="hidden" value={selectedMarker?.getLatLng().lng} name="lng" />
+                </label>
+   
+                <input type="submit" value="Save" class="btn variant-filled"/>
         </form>
     </div>
+    {/if}
+
+    
 </div>
 
 
