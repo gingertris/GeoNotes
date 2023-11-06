@@ -23,13 +23,13 @@
 
 
 <div class="flex flex-row space-x-4 p-4">
-    <div class="{selectedMarker ? "basis-4/5" : "basis-full"}">
+    <div class="{selectedMarker ? "basis-3/4" : "basis-full"}">
        <Map bind:selectedMarker bind:existingMarkers bind:map /> 
     </div>
     
     {#if selectedMarker}
-    <div class="basis-1/5">
-        <form>
+    <div class="basis-1/4">
+        <form method="POST">
                 <label class="label">
                     <span>Title</span>
                     <input class="input" type="text" name="title"/>
