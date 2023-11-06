@@ -30,6 +30,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"leaflet": "^1.9.4"
+		"@lucia-auth/adapter-prisma": "^3.0.2",
+		"leaflet": "^1.9.4",
+		"lucia": "^2.7.3"
 	}
 }
