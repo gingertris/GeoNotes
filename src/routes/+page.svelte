@@ -81,7 +81,7 @@
     {:else if selectedNote}
     <div class="flex flex-col basis-1/4 rounded-md outline outline-slate-700 p-4 bg-slate-200">
         <header class="text-lg"><b>{selectedNote.title}</b></header>
-        <main class="flex-grow">{@html selectedNoteHTML}</main>
+        <main class="flex-grow prose">{@html selectedNoteHTML}</main>
         <footer>
             <div class="flex">
                 <div class="flex-grow">

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import { skeleton } from '@skeletonlabs/tw-plugin'
 import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
 import {join} from 'path'
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}', 		join(require.resolve(
@@ -12,6 +13,6 @@ export default {
   },
   plugins: [skeleton({
     themes:{preset:["wintry"]}
-  }), forms],
+  }), forms, typography],
 }
 
